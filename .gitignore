@@ -1,0 +1,43 @@
+# 编译产物
+*.o
+*.obj
+*.exe
+*.out
+*.app
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+
+# 调试文件
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 构建目录
+build/
+bin/
+obj/
+debug/
+release/
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+*.bak
+
+# 测试输出
+test_output/
+*.test
