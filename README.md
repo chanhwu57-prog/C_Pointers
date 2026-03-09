@@ -79,7 +79,7 @@ C_Programming/
   - [GeeksforGeeks C语言教程](https://www.geeksforgeeks.org/c-programming-language/)
   - [Codecademy C语言课程](https://www.codecademy.com/learn/learn-c)
 
-## 进度跟踪
+
 
 - [x] 第1章：快速上手C语言 ✅
 - [ ] 第2章：基本数据类型
