@@ -35,69 +35,136 @@ int main(void) {
 - 常用编译器：GCC, Clang, MSVC
 - 编译命令：`gcc -o program program.c`
 
-## 重要知识点
+---
 
-### 预处理指令
-- `#include <stdio.h>` - 包含标准输入输出库
-- `#define` - 定义宏
+## 本节重点：memcpy 函数
 
-### main函数
-- 程序的入口点
-- 返回类型 int
-- 返回值 0 表示成功
+### 函数原型
+```c
+#include <string.h>
+void *memcpy(void *dest, const void *src, size_t n);
+```
 
-### 基本语法
-- 每条语句以分号结尾
-- 代码块用花括号包围
-- 区分大小写
+### 参数说明
+| 参数 | 含义 |
+|------|------|
+| `dest` | 目标缓冲区 |
+| `src` | 源缓冲区 |
+| `n` | 复制的字节数 |
 
-## 常见问题
+### 使用示例
+```c
+char src[] = "hello";
+char dest[10];
 
-1. **编译错误**：语法错误、缺少分号等
-2. **链接错误**：找不到库函数
-3. **运行错误**：逻辑错误、内存问题
+memcpy(dest, src, 5);        // 复制5个字节
+dest[5] = '\0';               // 手动添加结束符
+```
+
+### 注意事项
+- 不检查重叠，重叠用 memmove
+- 不会自动添加 `\0`
+- 按字节复制
+
+---
+
+## 本节重点：getline 函数
+
+### 函数原型
+```c
+ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+```
+
+### 参数说明
+
+| 参数 | 含义 |
+|------|------|
+| `lineptr` | 指向字符指针的指针，用于存放读取的行 |
+| `n` | 指向 size_t 变量的指针，存放缓冲区大小 |
+| `stream` | 输入源（stdin 表示标准输入） |
+
+### 返回值
+- **成功**: 返回读取的字符数（不包括结尾的 `\0`）
+- **失败或到达文件尾**: 返回 `-1`
+
+### 使用示例
+```c
+char *line = NULL;
+size_t bufsize = 0;
+
+// 第一次调用：自动分配内存
+getline(&line, &bufsize, stdin);
+
+// 后续调用：如果已有足够空间会复用，不够会自动扩容
+while (getline(&line, &bufsize, stdin) != -1) {
+    printf("%s", line);
+}
+
+free(line);  // 释放内存
+```
+
+### 为什么 buf_size 是 size_t？
+
+1. **size_t 是无符号整数类型**，专门表示内存大小
+2. 内存大小不能是负数，用无符号类型更安全
+3. 与 malloc/free、sizeof 等函数兼容
+
+---
+
+## 本节重点：fgets vs getline
+
+| 特性 | fgets | getline |
+|------|-------|---------|
+| 头文件 | stdio.h | stdio.h |
+| 缓冲区 | 需要手动分配固定大小 | 自动分配/扩容 |
+| 读取限制 | 最多 n-1 个字符 | 无限长度 |
+
+### fgets（固定缓冲区）
+```c
+char buf[100];
+fgets(buf, 100, stdin);  // 最多读99个字符
+```
+
+### getline（自动扩容）
+```c
+char *line = NULL;
+getline(&line, &bufsize, stdin);  // 自动处理任意长度
+```
+
+---
+
+## 本节重点：stdin/stdout/stderr
+
+| 名称 | 含义 | 用途 |
+|------|------|------|
+| stdin | 标准输入 | 键盘/文件/管道输入 |
+| stdout | 标准输出 | 正常输出 |
+| stderr | 标准错误 | 错误信息 |
+
+### 输入来源示例
+```bash
+# 从键盘输入
+./program
+
+# 从文件重定向
+./program < input.txt
+
+# 管道输入
+echo "hello" | ./program
+```
+
+---
 
 ## 练习要点
 
-- [ ] 编写并运行第一个C程序
-- [ ] 尝试不同的printf输出格式
-- [ ] 理解编译错误信息
-- [ ] 使用调试器单步执行
+- [x] 练习 1.1：Hello World - 基础输出
+- [x] 练习 1.2：带行号的输入复制 - 使用 getline 实现无限长度行读取
+- [x] 练习 1.3：Checksum 计算 - 字符值累加，溢出自动忽略
+- [x] 练习 1.4：最长行 - 固定大小数组记录最长行
+- [x] 练习 1.5：rearrange 改进 - continue 替代 break，跳过超范围列
+- [x] 练习 1.6：奇数列范围 - 检查列标号是否成对
 
-## 扩展阅读
-
-- C语言标准（C89/C90, C99, C11, C17）
-- 编译器优化选项
-- 代码风格指南
-
-## 实践练习
-
-### 练习1.1：输出个人信息
-- 学习使用 `printf` 输出多行文本
-- 文件：[exercise_1_1.c](../exercises/chapter_01/exercise_1_1.c)
-
-### 练习1.2：转义字符
-- `\n` - 换行
-- `\t` - 制表符
-- `\\` - 反斜杠
-- `\"` - 双引号
-- `\'` - 单引号
-- 文件：[exercise_1_2.c](../exercises/chapter_01/exercise_1_2.c)
-
-### 练习1.3：格式化输出
-- `%d` - 整数
-- `%f` - 浮点数
-- `%c` - 字符
-- `%s` - 字符串
-- 宽度控制：`%5d`, `%-10d`
-- 精度控制：`%.2f`
-- 文件：[exercise_1_3.c](../exercises/chapter_01/exercise_1_3.c)
-
-### 练习1.4：基本运算
-- 加减乘除：`+`, `-`, `*`, `/`
-- 取模运算：`%`
-- 注意：整数除法会截断小数部分
-- 文件：[exercise_1_4.c](../exercises/chapter_01/exercise_1_4.c)
+---
 
 ## 编译命令速查
 
@@ -118,34 +185,56 @@ gcc -g -o program program.c
 gcc -Wall -Wextra -std=c11 -g -o program program.c
 ```
 
+---
+
+## 项目使用说明
+
+### 运行脚本
+项目根目录下的 `run.sh` 可以方便地编译和运行练习：
+
+```bash
+# 在项目根目录执行
+cd /Users/chanh/Documents/C_Learning/C_Pointers
+
+# 编译运行
+./run.sh exercises/chapter_01/exercise_1_2.c
+
+# 管道测试
+echo "hello world" | ./run.sh exercises/chapter_01/exercise_1_3.c
+
+# 从文件读取
+./run.sh exercises/chapter_01/exercise_1_2.c < input.txt
+```
+
+### 输出位置
+- 可执行文件生成在 `build/` 目录
+- 不会污染源代码目录
+
+---
+
 ## 常见错误及解决
 
-1. **缺少分号**
-   ```c
-   printf("Hello")  // 错误：缺少分号
-   printf("Hello"); // 正确
-   ```
+1. **gets() 缓冲区溢出**
+   - 原因：gets() 不检查缓冲区大小
+   - 解决：使用 getline() 或 fgets()
 
-2. **main函数声明错误**
-   ```c
-   void main() {}      // 不推荐
-   int main() {}       // 可以
-   int main(void) {}   // 推荐
-   ```
+2. **printf 缺少换行符**
+   - 原因：输出挤在一起
+   - 解决：加 `\n`
 
-3. **格式说明符错误**
-   ```c
-   printf("%d", 3.14);  // 错误：类型不匹配
-   printf("%f", 3.14);  // 正确
-   ```
+3. **未释放内存**
+   - 原因：getline 分配的内存未释放
+   - 解决：使用 free()
+
+---
 
 ## 心得体会
 
-通过第1章的学习，掌握了C语言程序的基本结构：
-1. 理解了预处理指令的作用
-2. 掌握了main函数的标准写法
-3. 学会了使用printf进行格式化输出
-4. 了解了常用的转义字符
-5. 完成了基本的算术运算练习
+通过第1章的学习和练习：
+1. 理解了 C 语言程序的基本结构
+2. 掌握了 getline() 处理任意长度输入
+3. 学会了 stdin/stdout 的使用
+4. 了解了 size_t 的作用
+5. 能够使用 run.sh 脚本进行测试
 
-下一步：学习第2章的基本数据类型
+下一步：继续学习后续章节的编程练习
