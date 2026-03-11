@@ -1,21 +1,12 @@
-# 模板 Makefile
-# 请根据实际练习文件修改
+# 第3章练习 Makefile
+# 编译结果保存到 build 目录，不会污染练习文件夹
 
 PROJECT_DIR := /Users/chanh/Documents/C_Learning/C_Pointers
-BUILD_DIR := $(PROJECT_DIR)/build/chapter_XX
-SRC_DIR := $(PROJECT_DIR)/exercises/chapter_XX
+BUILD_DIR := $(PROJECT_DIR)/build/chapter_03
+SRC_DIR := $(PROJECT_DIR)/exercises/chapter_03
 
 CC := gcc
 CFLAGS := -Wall -Wextra
-
-# ========== 添加你的练习 ==========
-# 格式:
-# .PHONY: exercise_X_Y
-# exercise_X_Y: $(BUILD_DIR)/exercise_X_Y
-# 	@$(BUILD_DIR)/exercise_X_Y
-#
-# $(BUILD_DIR)/exercise_X_Y: $(BUILD_DIR)/exercise_X_Y.o
-# 	$(CC) $(CFLAGS) -o $@ $^
 
 # ========== 编译规则 ==========
 $(BUILD_DIR):
