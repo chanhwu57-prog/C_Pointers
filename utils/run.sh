@@ -2,7 +2,7 @@
 
 # C与指针 - 练习运行脚本
 
-PROJECT_DIR="/Users/chanh/Documents/C_Learning/C_Pointers"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_DIR="$PROJECT_DIR/build"
 
 # 创建 build 目录

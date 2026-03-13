@@ -56,7 +56,11 @@ exercise_sections = {
     18: '18.8',
 }
 
-exercises_dir = '/Users/chanh/Documents/C_Learning/C_Pointers/exercises'
+import os
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = os.path.dirname(script_dir)
+exercises_dir = os.path.join(project_dir, 'exercises')
 
 for ch in range(1, 19):
     ch_dir = f'{exercises_dir}/chapter_{ch:02d}'
@@ -77,7 +81,7 @@ for ch in range(1, 19):
         # 从EPUB中提取
         epub_file = chapter_files[ch]
         cmd = f'unzip -p "C和指针 - [美]Kenneth A. Reek.epub" {epub_file}'
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd='/Users/chanh/Documents/C_Learning/C_Pointers')
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=project_dir)
         
         if result.returncode != 0:
             f.write("（提取失败）\n")
